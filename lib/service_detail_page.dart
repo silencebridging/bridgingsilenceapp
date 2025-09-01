@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'services/sign_to_speech/sign_to_speech_page.dart';
+import 'services/speech_to_sign/speech_to_sign_page.dart';
 
 /// ServiceDetailPage is a generic template for displaying details about a service
 class ServiceDetailPage extends StatelessWidget {
@@ -156,13 +158,30 @@ class ServiceDetailPage extends StatelessWidget {
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
-                              // This would launch the specific service functionality
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('$title service initiated'),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
+                              // Launch the specific service functionality based on title
+                              if (title == 'Sign to Speech') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SignToSpeechPage(),
+                                  ),
+                                );
+                              } else if (title == 'Speech to Sign') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SpeechToSignPage(),
+                                  ),
+                                );
+                              } else {
+                                // For other services, just show a message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('$title service initiated'),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: color,

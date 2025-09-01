@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to translate sign language into speech</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs microphone access to translate speech into sign language</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app needs speech recognition to convert your speech into text</string>
 </dict>
 </plist>
