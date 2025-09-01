@@ -79,6 +79,7 @@ class AuthService with ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
       
+      // Sign up the user with their metadata
       final response = await SupabaseConfig.client.auth.signUp(
         email: email,
         password: password,
@@ -88,17 +89,28 @@ class AuthService with ChangeNotifier {
       );
       
       if (response.user != null) {
-        // Create user profile in the database
-        await SupabaseConfig.client.from('profiles').insert({
-          'id': response.user!.id,
-          'email': email,
-          'full_name': fullName,
-          'avatar_url': null,
-          'created_at': DateTime.now().toIso8601String(),
-        });
+        print('User created successfully with ID: ${response.user?.id}');
+        // Rely solely on the database trigger to create the profile
+        // No manual profile creation needed
         
-        await _fetchUserProfile();
-        return true;
+        // Check if email confirmation is required
+        if (response.session != null) {
+          print('Session created, no email confirmation required');
+          // Email confirmation not required or already confirmed
+          try {
+            await _fetchUserProfile();
+            print('User profile fetched successfully');
+          } catch (e) {
+            print('Error fetching profile: $e');
+            // Continue even if profile fetch fails - the trigger might need time
+          }
+          return true;
+        } else {
+          print('Email confirmation required');
+          // Email confirmation required
+          _errorMessage = 'Please check your email to confirm your account';
+          return true; // We return true but show a message about email confirmation
+        }
       } else {
         _errorMessage = 'Unknown error occurred during registration';
         return false;
@@ -190,20 +202,61 @@ class AuthService with ChangeNotifier {
 
   /// Fetch user profile from the database
   Future<void> _fetchUserProfile() async {
-    final userId = SupabaseConfig.client.auth.currentUser?.id;
-    
-    if (userId == null) {
+    try {
+      final userId = SupabaseConfig.client.auth.currentUser?.id;
+      
+      if (userId == null) {
+        _currentUser = null;
+        print('No current user found');
+        return;
+      }
+      
+      print('Fetching profile for user ID: $userId');
+      
+      try {
+        // Try to fetch the user's profile
+        final response = await SupabaseConfig.client
+            .from('profiles')
+            .select()
+            .eq('id', userId)
+            .maybeSingle(); // Use maybeSingle instead of single to prevent errors
+        
+        print('Profile fetch response: $response');
+        
+        if (response != null) {
+          print('Converting profile response to UserModel');
+          _currentUser = UserModel.fromJson(response);
+          print('User profile successfully loaded');
+        } else {
+          print('No profile found, creating minimal user object');
+          // Profile might not exist yet, especially if the database trigger isn't set up
+          // Create a minimal user object based on auth data
+          final authUser = SupabaseConfig.client.auth.currentUser!;
+          _currentUser = UserModel(
+            id: authUser.id,
+            email: authUser.email ?? '',
+            fullName: authUser.userMetadata?['full_name'] as String?,
+            createdAt: DateTime.parse(authUser.createdAt),
+          );
+          print('Created minimal user object: ${_currentUser?.fullName}');
+        }
+      } catch (profileError) {
+        print('Error fetching profile from database: $profileError');
+        // Even if profile fetch fails, create a minimal user from auth data
+        final authUser = SupabaseConfig.client.auth.currentUser!;
+        _currentUser = UserModel(
+          id: authUser.id,
+          email: authUser.email ?? '',
+          fullName: authUser.userMetadata?['full_name'] as String?,
+          createdAt: DateTime.parse(authUser.createdAt),
+        );
+        print('Created fallback minimal user object due to fetch error');
+      }
+    } catch (e) {
+      print('Critical error in _fetchUserProfile: $e');
+      _errorMessage = 'Error fetching user profile: $e';
       _currentUser = null;
-      return;
     }
-    
-    final data = await SupabaseConfig.client
-        .from('profiles')
-        .select()
-        .eq('id', userId)
-        .single();
-    
-    _currentUser = UserModel.fromJson(data);
   }
 
   /// Clear any error messages

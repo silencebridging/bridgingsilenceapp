@@ -14,6 +14,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   
+  // Build the bottom navigation bar with Home and Profile tabs
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.blue[800],
+      unselectedItemColor: Colors.grey[600],
+      currentIndex: _currentIndex,
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     // Return the appropriate page based on the selected tab

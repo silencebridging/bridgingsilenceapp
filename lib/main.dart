@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'welcome_page.dart';
+import 'config/supabase_config.dart';
+import 'services/auth_service.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Supabase
+  await SupabaseConfig.initialize();
+  
+  // Initialize Auth Service
+  final authService = AuthService();
+  await authService.initialize();
+  
   runApp(const MainApp());
 }
 

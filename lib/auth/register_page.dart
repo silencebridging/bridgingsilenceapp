@@ -41,29 +41,82 @@ class _RegisterPageState extends State<RegisterPage> {
       _errorMessage = null;
     });
     
-    final success = await _authService.registerWithEmail(
-      _emailController.text.trim(),
-      _passwordController.text,
-      _fullNameController.text.trim(),
-    );
-    
-    if (success) {
-      // Navigate to home page on successful registration
+    try {
+      final success = await _authService.registerWithEmail(
+        _emailController.text.trim(),
+        _passwordController.text,
+        _fullNameController.text.trim(),
+      );
+      
+      if (success) {
+        if (_authService.errorMessage?.contains('check your email') ?? false) {
+          // Email verification required
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please check your email to confirm your account'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 5),
+              ),
+            );
+            // Navigate to login page after showing the message
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          }
+        } else {
+          // Auto login successful, navigate to home
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          }
+        }
+      } else {
+        setState(() {
+          _errorMessage = _authService.errorMessage ?? 'Registration failed. Please try again.';
+        });
+        
+        // Display the error in a more visible way
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(_errorMessage ?? 'Registration failed'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Registration error: $e');
+      setState(() {
+        // Check if this is a permission error (42501)
+        if (e.toString().contains('42501')) {
+          _errorMessage = 'Permission error during registration. The administrator needs to set up the database triggers properly.';
+        } else {
+          _errorMessage = 'Error during registration: $e';
+        }
+      });
+      
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage ?? 'An unexpected error occurred'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 8),
+          ),
         );
       }
-    } else {
-      setState(() {
-        _errorMessage = _authService.errorMessage;
-      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-    
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override

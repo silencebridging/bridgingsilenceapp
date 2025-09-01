@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'auth/login_page.dart';
 
 /// IntroCarousel widget displays a carousel of pages that explain about the Bridging Silence app
 /// Each page contains an image, title, and description
@@ -90,10 +90,10 @@ class _IntroCarouselState extends State<IntroCarousel> {
                 alignment: Alignment.topRight,
                 child: TextButton(
                   onPressed: () {
-                    // Navigate to the main app screen when Skip is pressed
+                    // Navigate to the login page when Skip is pressed
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
                     );
                   },
                   child: const Text(
@@ -166,10 +166,10 @@ class _IntroCarouselState extends State<IntroCarousel> {
                             curve: Curves.easeIn,
                           );
                         } else {
-                          // Navigate to the main app screen when Finish is pressed
+                          // Navigate to the login page when Finish is pressed
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(builder: (context) => const LoginPage()),
                           );
                         }
                       },
