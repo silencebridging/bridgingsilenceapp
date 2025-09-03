@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'services/sign_to_speech/sign_to_speech_page.dart';
 import 'services/speech_to_sign/speech_to_sign_page.dart';
 import 'services/sign_language_archive/sign_language_archive_page.dart';
-import 'pages/help_support_page.dart';
+import 'pages/how_to_use_page.dart';
+import 'pages/settings_page.dart';
+import 'pages/about_page.dart';
 
 /// ServiceDetailPage is a generic template for displaying details about a service
 class ServiceDetailPage extends StatelessWidget {
@@ -182,11 +184,25 @@ class ServiceDetailPage extends StatelessWidget {
                                     builder: (context) => const SignLanguageArchivePage(),
                                   ),
                                 );
-                              } else if (title == 'How to Use' || title == 'Settings' || title == 'About Bridging Silence') {
+                              } else if (title == 'How to Use') {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const HelpSupportPage(),
+                                    builder: (context) => const HowToUsePage(),
+                                  ),
+                                );
+                              } else if (title == 'Settings') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SettingsPage(),
+                                  ),
+                                );
+                              } else if (title == 'About Bridging Silence') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AboutPage(),
                                   ),
                                 );
                               } else {

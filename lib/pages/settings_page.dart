@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// SettingsPage allows users to customize app preferences
 /// with support for both English and Swahili languages
+/// and detailed explanations of settings options
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -9,7 +10,7 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderStateMixin {
+class _SettingsPageState extends State<SettingsPage> with TickerProviderStateMixin {
   bool _isEnglish = true;
   
   // Settings options
@@ -20,9 +21,42 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   String _voiceType = 'Female';
   double _voiceSpeed = 0.5;
   double _voiceVolume = 0.7;
+  bool _notificationsEnabled = true;
+  bool _dataCollectionEnabled = false;
+  bool _autoSignDetection = true;
+  String _preferredCamera = 'Front';
   
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  late TabController _tabController;
+  
+  // Settings descriptions for help popups
+  final Map<String, Map<String, String>> _settingsDescriptions = {
+    'captions': {
+      'titleEn': 'Captions',
+      'descriptionEn': 'Shows text captions for all spoken and signed content. Turn this on to see written text alongside translations.',
+      'titleSw': 'Manukuu',
+      'descriptionSw': 'Huonyesha manukuu ya maandishi kwa maudhui yote yanayozungumzwa na kuashiriwa. Washa ili uone maandishi pamoja na tafsiri.',
+    },
+    'landmarks': {
+      'titleEn': 'Show Hand Landmarks',
+      'descriptionEn': 'Displays tracking points on your hands during signing. Useful for verifying that your signs are being detected correctly.',
+      'titleSw': 'Onyesha Alama za Mkono',
+      'descriptionSw': 'Huonyesha pointi za ufuatiliaji kwenye mikono yako wakati wa kuashiria. Husaidia kuthibitisha kuwa ishara zako zinagundulika kwa usahihi.',
+    },
+    'vibration': {
+      'titleEn': 'Vibration Feedback',
+      'descriptionEn': 'Provides tactile feedback when signs are detected or when translations are complete.',
+      'titleSw': 'Mrejesho wa Mtetemo',
+      'descriptionSw': 'Hutoa mrejesho wa mguso wakati ishara zinagundulika au tafsiri zinakamilika.',
+    },
+    'highContrast': {
+      'titleEn': 'High Contrast Mode',
+      'descriptionEn': 'Enhances visual distinction between UI elements for better visibility in various lighting conditions and for users with visual impairments.',
+      'titleSw': 'Hali ya Tofauti ya Juu',
+      'descriptionSw': 'Huongeza tofauti ya kuona kati ya vipengele vya UI kwa mwonekano bora katika hali mbalimbali za mwangaza na kwa watumiaji wenye ulemavu wa kuona.',
+    },
+  };
   
   @override
   void initState() {

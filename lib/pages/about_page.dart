@@ -19,6 +19,8 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
     'mission': false,
     'who': false,
     'how': false,
+    'team': false,
+    'technology': false,
     'future': false,
   };
   
@@ -79,6 +81,14 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
       }
       
       if (scrollPosition > viewportHeight * 0.5) {
+        _visibleSections['team'] = true;
+      }
+      
+      if (scrollPosition > viewportHeight * 0.7) {
+        _visibleSections['technology'] = true;
+      }
+      
+      if (scrollPosition > viewportHeight * 0.9) {
         _visibleSections['future'] = true;
       }
     });
@@ -234,6 +244,30 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
                 
                 const SizedBox(height: 20),
                 
+                // Team Section
+                _buildAnimatedSection(
+                  title: _isEnglish ? 'Our Team' : 'Timu Yetu',
+                  icon: Icons.people_alt,
+                  content: _isEnglish
+                      ? 'Bridging Silence was created by a dedicated team of developers, designers, and sign language experts who share a passion for accessible technology. Our team includes deaf consultants who provide invaluable insights to ensure our app truly meets the needs of the deaf community.'
+                      : 'Bridging Silence iliundwa na timu ya watengenezaji programu, wabunifu, na wataalamu wa lugha ya ishara wanaoshiriki shauku ya teknolojia inayopatikana. Timu yetu inajumuisha washauri viziwi ambao hutoa maarifa muhimu kuhakikisha kuwa programu yetu kweli inatimiza mahitaji ya jamii ya viziwi.',
+                  isVisible: _visibleSections['team']!,
+                ),
+                
+                const SizedBox(height: 20),
+                
+                // Technology Section
+                _buildAnimatedSection(
+                  title: _isEnglish ? 'Technology' : 'Teknolojia',
+                  icon: Icons.devices,
+                  content: _isEnglish
+                      ? 'Bridging Silence leverages cutting-edge technologies including MediaPipe for hand tracking, TensorFlow for sign recognition, Flutter for cross-platform development, and Supabase for secure data storage. Our AI models are continuously improving through machine learning to enhance accuracy and expand our sign language vocabulary.'
+                      : 'Bridging Silence inatumia teknolojia za kisasa ikiwa ni pamoja na MediaPipe kwa ufuatiliaji wa mikono, TensorFlow kwa utambuzi wa ishara, Flutter kwa maendeleo ya majukwaa mbalimbali, na Supabase kwa uhifadhi salama wa data. Modeli zetu za AI zinaendelea kuboreshwa kupitia mafunzo ya mashine ili kuboresha usahihi na kupanua msamiati wetu wa lugha ya ishara.',
+                  isVisible: _visibleSections['technology']!,
+                ),
+                
+                const SizedBox(height: 20),
+                
                 // Future Vision Section
                 _buildAnimatedSection(
                   title: _isEnglish ? 'Our Future Vision' : 'Maono Yetu ya Baadaye',
@@ -245,6 +279,47 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
                 ),
                 
                 const SizedBox(height: 30),
+                
+                // Testimonials section
+                Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _isEnglish ? 'Testimonials' : 'Ushuhuda',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildTestimonial(
+                          name: 'Maria L.',
+                          role: _isEnglish ? 'Teacher for the Deaf' : 'Mwalimu wa Viziwi',
+                          quote: _isEnglish 
+                            ? '"Bridging Silence has transformed how my students communicate with their hearing peers. It\'s an invaluable classroom tool."' 
+                            : '"Bridging Silence imebadilisha jinsi wanafunzi wangu wanawasiliana na wenzao wanaosikia. Ni chombo muhimu darasani."',
+                        ),
+                        _buildTestimonial(
+                          name: 'David K.',
+                          role: _isEnglish ? 'Deaf Community Advocate' : 'Mtetezi wa Jamii ya Viziwi',
+                          quote: _isEnglish 
+                            ? '"Finally, an app that understands the nuances of sign language and provides accurate translations. This is technology that truly makes a difference."' 
+                            : '"Hatimaye, programu inayoelewa tofauti ndogo za lugha ya ishara na kutoa tafsiri sahihi. Hii ni teknolojia ambayo kweli inaleta tofauti."',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
                 
                 // Contact and social media section
                 Card(
@@ -338,6 +413,80 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
             ),
           ),
         ],
+      ),
+    );
+  }
+  
+  // Build a testimonial card
+  Widget _buildTestimonial({
+    required String name,
+    required String role,
+    required String quote,
+  }) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              quote,
+              style: TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey[700],
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      name.substring(0, 1),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[800],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      role,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
