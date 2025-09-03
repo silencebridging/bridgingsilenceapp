@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'services/sign_to_speech/sign_to_speech_page.dart';
 import 'services/speech_to_sign/speech_to_sign_page.dart';
+import 'services/sign_language_archive/sign_language_archive_page.dart';
+import 'pages/help_support_page.dart';
 
 /// ServiceDetailPage is a generic template for displaying details about a service
 class ServiceDetailPage extends StatelessWidget {
@@ -171,6 +173,20 @@ class ServiceDetailPage extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const SpeechToSignPage(),
+                                  ),
+                                );
+                              } else if (title == 'Sign Language Archive') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SignLanguageArchivePage(),
+                                  ),
+                                );
+                              } else if (title == 'How to Use' || title == 'Settings' || title == 'About Bridging Silence') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HelpSupportPage(),
                                   ),
                                 );
                               } else {

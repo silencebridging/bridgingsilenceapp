@@ -120,7 +120,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                         ),
                         padding: const EdgeInsets.all(15),
                         child: Image.asset(
-                          'assets/logo.png',
+                          'assets/logo.jpg',
                           fit: BoxFit.contain,
                         ),
                       ),

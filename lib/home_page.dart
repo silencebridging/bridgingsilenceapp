@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       padding: const EdgeInsets.all(8),
                       child: Image.asset(
-                        'assets/logo.png',
+                        'assets/logo.jpg',
                         fit: BoxFit.contain,
                       ),
                     ),

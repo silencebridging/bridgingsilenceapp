@@ -22,25 +22,25 @@ class _IntroCarouselState extends State<IntroCarousel> {
     {
       'title': 'Welcome to Bridging Silence',
       'description': 'An innovative platform designed to connect people through meaningful non-verbal communication.',
-      'image': 'assets/logo.png',
+      'image': 'assets/logo.jpg',
       'color': Colors.blue[900],
     },
     {
       'title': 'Express Without Words',
       'description': 'Discover new ways to express yourself beyond verbal communication. Connect on a deeper level.',
-      'image': 'assets/logo.png',
+      'image': 'assets/logo.jpg',
       'color': Colors.blue[800],
     },
     {
       'title': 'Build Connections',
       'description': 'Form meaningful connections with others through shared experiences and silent understanding.',
-      'image': 'assets/logo.png',
+      'image': 'assets/logo.jpg',
       'color': Colors.blue[700],
     },
     {
       'title': 'Join Our Community',
       'description': 'Become part of a growing community dedicated to exploring the power of silence.',
-      'image': 'assets/logo.png',
+      'image': 'assets/logo.jpg',
       'color': Colors.blue[600],
     },
   ];

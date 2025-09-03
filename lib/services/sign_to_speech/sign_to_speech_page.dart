@@ -126,24 +126,34 @@ class _SignToSpeechPageState extends State<SignToSpeechPage> with WidgetsBinding
     _initializeCamera(newIndex);
   }
 
-  /// Simulate sign language detection (would be replaced by actual AI processing)
-  void _detectSignLanguage() {
-    if (_isProcessing) return;
+  /// Detect sign language (currently simulated)
+  Future<void> _detectSignLanguage() async {
+    if (_isProcessing || !_isCameraInitialized) return;
 
     setState(() {
       _isProcessing = true;
       _detectedText = 'Processing...';
     });
 
-    // Simulate processing delay
-    Timer(const Duration(seconds: 2), () {
-      // This would be replaced with actual sign language processing
+    try {
+      // For demo purposes, we're simulating sign language detection
+      // In a real implementation, this would use an ML model to:
+      // 1. Capture a frame from the camera
+      // 2. Detect hand landmarks and gestures
+      // 3. Convert recognized signs to text
+      
+      // Simulate processing delay
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // Demo sign language texts
       final demoTexts = [
-        'Hello, how are you?',
-        'Nice to meet you',
-        'My name is John',
-        'I need help',
+        'Hello',
         'Thank you',
+        'Please',
+        'Yes',
+        'No',
+        'Help',
+        'I understand',
       ];
 
       final randomText = demoTexts[DateTime.now().second % demoTexts.length];
@@ -152,7 +162,18 @@ class _SignToSpeechPageState extends State<SignToSpeechPage> with WidgetsBinding
         _isProcessing = false;
         _detectedText = randomText;
       });
-    });
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+        _detectedText = 'Error: $e';
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error processing sign language: $e')),
+        );
+      }
+    }
   }
 
   @override
