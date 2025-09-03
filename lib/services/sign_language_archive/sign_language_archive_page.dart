@@ -362,7 +362,7 @@ class _SignLanguageArchivePageState extends State<SignLanguageArchivePage> with 
           ),
         ),
         SizedBox(
-          height: 220,
+          height: 230, // Increased height from 220 to 230 to accommodate content
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categoryVideos.length,
@@ -445,7 +445,7 @@ class _SignLanguageArchivePageState extends State<SignLanguageArchivePage> with 
               ),
               
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 8), // Reduced padding
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -453,7 +453,7 @@ class _SignLanguageArchivePageState extends State<SignLanguageArchivePage> with 
                     Text(
                       video['title'],
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 15, // Slightly smaller font
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
@@ -472,7 +472,7 @@ class _SignLanguageArchivePageState extends State<SignLanguageArchivePage> with 
                       overflow: TextOverflow.ellipsis,
                     ),
                     
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6), // Reduced spacing
                     
                     // Difficulty indicator
                     Row(
